@@ -20,6 +20,7 @@ O usuário descreve o que deseja no chat e o ForgeAI solicita à IA uma atualiza
 - **Node.js**
 - **Express 5**
 - **OpenAI API**
+- **PostgreSQL** (cota diária de tokens por usuário)
 - **dotenv**
 - HTML5
 - CSS3
@@ -63,7 +64,10 @@ Crie um arquivo `.env` na raiz do projeto:
 OPENAI_API_KEY=SUA_CHAVE_DA_OPENAI
 OPENAI_MODEL=gpt-5
 PORT=3000
+DATABASE_URL=postgresql://user:password@host:port/database
 ```
+
+O `DATABASE_URL` deve apontar para uma instância PostgreSQL. Ele é usado para controlar a cota diária de tokens por usuário (identificado pelo header `X-User-ID` ou pelo parâmetro `userId`). A tabela `users` é criada automaticamente na inicialização do servidor.
 
 Você pode usar `.env.example` como referência.
 
