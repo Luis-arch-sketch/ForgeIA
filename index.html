@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ForgeAI</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+  <h1>ForgeAI</h1>
+  <button id="newProject">+ Novo projeto</button>
+  <div id="projects"></div>
+  <button id="loginBtn">Entrar</button>
+</aside>
+<main>
+<header>
+  <strong id="projectName">Novo projeto</strong>
+  <span id="tokens">1.000.000.000 tokens</span>
+  <button id="exportBtn">Exportar</button>
+  <button id="publishBtn">Publicar</button>
+</header>
+<section class="workspace">
+  <div class="chat">
+    <div id="messages" class="messages">
+      <div class="msg ai">Olá! Diga o que você quer criar ou alterar no seu site.</div>
+    </div>
+    <form id="promptForm">
+      <textarea id="prompt" placeholder="Ex.: Crie uma página de login moderna..." required></textarea>
+      <button>Gerar</button>
+    </form>
+  </div>
+  <div class="builder">
+    <div class="tabs">
+      <button class="active" data-tab="preview">Preview</button>
+      <button data-tab="code">Código</button>
+    </div>
+    <iframe id="preview"></iframe>
+    <pre id="code" hidden></pre>
+  </div>
+</section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
