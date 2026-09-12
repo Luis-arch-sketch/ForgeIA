@@ -1,123 +1,119 @@
 # ForgeAI
 
-ForgeAI é uma aplicação web que usa a API da OpenAI para gerar e modificar sites a partir de instruções em linguagem natural.
+ForgeAI é um construtor de sites com IA que transforma instruções em HTML, CSS e JavaScript usando a API da OpenAI.
 
-O usuário descreve o que deseja no chat e o ForgeAI solicita à IA uma atualização do projeto, recebendo HTML, CSS e JavaScript para atualizar o preview automaticamente.
+## Funcionalidades
 
-## ✨ Funcionalidades
-
-- Geração de sites por prompt.
-- Alteração de sites existentes usando o código atual como contexto.
-- Preview em tempo real dentro da aplicação.
+- Geração e alteração de sites por prompt.
+- Preview do site em tempo real.
 - Visualização do código gerado.
-- Exportação do site para um arquivo HTML único.
-- Criação de um novo projeto.
-- Backend protegido para comunicação com a API da OpenAI.
-- Configuração do modelo e da porta por variáveis de ambiente.
+- Exportação do site para um arquivo HTML.
+- Backend Express para manter a chave da OpenAI fora do navegador.
+- Suporte a projetos novos.
 
-## 🧱 Tecnologias
+## Tecnologias
 
-- **Node.js**
-- **Express 5**
-- **OpenAI API**
-- **dotenv**
 - HTML5
 - CSS3
 - JavaScript
+- Node.js
+- Express
+- OpenAI API
+- dotenv
 
-## 📁 Estrutura do projeto
+## Estrutura
 
 ```text
 ForgeAI/
-├── index.html        # Interface principal da aplicação
-├── style.css         # Estilos da interface
-├── app.js            # Lógica do frontend e comunicação com o backend
-├── server.js         # Servidor Express e integração com a OpenAI
-├── package.json      # Dependências e scripts do projeto
-├── .env.example      # Exemplo das variáveis de ambiente
-├── .gitignore        # Arquivos ignorados pelo Git
-└── README.md         # Documentação do projeto
+├── README.md
+├── index.html
+├── style.css
+├── app.js
+├── server.js
+├── package.json
+├── .env.example
+└── .gitignore
 ```
 
-## 🚀 Instalação
+## Requisitos
 
-### 1. Pré-requisitos
+- Node.js instalado.
+- Uma chave de API da OpenAI.
 
-Instale o **Node.js** em uma versão compatível com o projeto.
+## Instalação
 
-Também é necessária uma chave de API da OpenAI para utilizar a geração de sites.
+1. Entre na pasta do projeto:
 
-### 2. Instale as dependências
+```bash
+cd ForgeAI
+```
 
-No diretório do projeto, execute:
+2. Instale as dependências:
 
 ```bash
 npm install
 ```
 
-### 3. Configure as variáveis de ambiente
-
-Crie um arquivo `.env` na raiz do projeto:
+3. Crie um arquivo chamado `.env` na raiz do projeto, baseado em `.env.example`:
 
 ```env
-OPENAI_API_KEY=SUA_CHAVE_DA_OPENAI
+OPENAI_API_KEY=sua_chave_aqui
 OPENAI_MODEL=gpt-5
 PORT=3000
 ```
 
-Você pode usar `.env.example` como referência.
+**Nunca publique o arquivo `.env` no GitHub.** Ele já está protegido pelo `.gitignore`.
 
-> **Importante:** nunca publique sua `OPENAI_API_KEY` no frontend, no GitHub ou em arquivos acessíveis pelo navegador. A chave deve permanecer somente no servidor.
-
-### 4. Inicie o ForgeAI
+4. Inicie o ForgeAI:
 
 ```bash
 npm start
 ```
 
-O servidor será iniciado na porta configurada. Por padrão:
+5. Abra no navegador:
 
 ```text
 http://localhost:3000
 ```
 
-Abra esse endereço no navegador.
+## Como usar
 
-## 💬 Como usar
-
-1. Abra o ForgeAI no navegador.
-2. Digite no campo de prompt o que deseja criar.
-3. Clique em **Gerar**.
-4. A aplicação enviará o pedido para o backend.
-5. O backend enviará o pedido para a OpenAI.
-6. A resposta da IA será interpretada como JSON contendo `html`, `css` e `javascript`.
-7. O preview será atualizado automaticamente.
-
-### Exemplo de prompt
+Digite no campo de prompt algo como:
 
 ```text
-Crie uma landing page moderna para uma empresa de tecnologia, com hero section, botão de chamada para ação, seção de benefícios e design responsivo.
+Crie uma landing page moderna para uma loja de tênis, com seção de produtos, preços, botão de compra e design responsivo.
 ```
 
-Para alterar o site existente, basta descrever a mudança:
+O ForgeAI envia o pedido ao backend, que chama a OpenAI. A resposta deve conter HTML, CSS e JavaScript, que são carregados no preview.
+
+Você também pode pedir alterações, por exemplo:
 
 ```text
-Adicione uma seção de depoimentos abaixo dos benefícios e mantenha o estilo visual atual.
+Deixe o fundo escuro e adicione uma seção de depoimentos.
 ```
 
-## 🧠 Funcionamento da IA
+## API
 
-O endpoint principal da aplicação é:
+### `POST /api/generate`
 
-```text
-POST /api/generate
-```
-
-Ele recebe um objeto semelhante a:
+Recebe:
 
 ```json
 {
   "prompt": "Crie uma página de login moderna",
+  "files": {
+    "html": "",
+    "css": "",
+    "javascript": ""
+  }
+}
+```
+
+Retorna os arquivos gerados:
+
+```json
+{
+  "success": true,
   "files": {
     "html": "...",
     "css": "...",
@@ -126,72 +122,58 @@ Ele recebe um objeto semelhante a:
 }
 ```
 
-O servidor envia para a OpenAI o prompt do usuário junto com o código atual do projeto. A IA é instruída a retornar somente um JSON contendo:
+## Segurança
 
-```json
-{
-  "html": "...",
-  "css": "...",
-  "javascript": "..."
-}
+A chave da OpenAI deve ficar somente no servidor, dentro do `.env`.
+
+Não coloque:
+
+```env
+OPENAI_API_KEY=...
 ```
 
-Esse resultado é usado pelo frontend para atualizar o preview e o código exibido.
+dentro de `index.html`, `app.js` ou qualquer arquivo enviado ao navegador.
 
-## 📤 Exportação
+Também não publique sua chave no GitHub.
 
-O botão **Exportar** gera um arquivo HTML único contendo:
+## Exportação
 
-- HTML do projeto;
-- CSS incorporado em `<style>`;
-- JavaScript incorporado em `<script>`.
+O botão **Exportar** gera um arquivo `forgeai-site.html` contendo o HTML, CSS e JavaScript do projeto atual.
 
-O arquivo gerado pode ser aberto diretamente no navegador ou enviado para uma hospedagem de páginas estáticas, desde que o site não dependa de funcionalidades de backend.
+## Publicação
 
-## 🌐 Publicação
+O botão **Publicar** é apenas um aviso no estado atual do projeto. Para publicar o ForgeAI em produção, é necessário hospedar o backend Node.js e configurar a variável `OPENAI_API_KEY` no ambiente do servidor.
 
-O botão **Publicar** atualmente exibe uma orientação para utilizar uma hospedagem com backend.
+## Desenvolvimento
 
-A publicação automática ainda não está implementada. Para colocar o ForgeAI em produção, é necessário hospedar o servidor Node.js e configurar a variável `OPENAI_API_KEY` no ambiente do servidor.
+Para alterar a interface, edite:
 
-> Não coloque a chave da OpenAI dentro de `index.html`, `app.js`, `style.css` ou qualquer outro arquivo enviado ao navegador.
+- `index.html` — estrutura.
+- `style.css` — aparência.
+- `app.js` — comportamento do frontend.
+- `server.js` — backend e integração com a OpenAI.
 
-## 🔐 Segurança
+## Licença
 
-Algumas boas práticas importantes para uma implantação real:
+Este projeto ainda não possui uma licença definida.
 
-- Mantenha a `OPENAI_API_KEY` somente no backend.
-- Não envie o arquivo `.env` para o Git.
-- Configure limites de requisições (rate limiting) em produção.
-- Valide e limite o tamanho dos prompts recebidos.
-- Considere autenticação caso a aplicação seja disponibilizada publicamente.
-- Adicione proteção contra abuso da API.
-- Revise o HTML/JavaScript gerado antes de permitir publicação automática.
 
-## 🛠️ Desenvolvimento
+## 💳 Sistema de créditos
 
-Para iniciar o projeto durante o desenvolvimento:
+O ForgeAI usa créditos equivalentes aos tokens consumidos pela API.
 
-```bash
-npm start
-```
+- O saldo inicial é de **1.000.000.000 créditos**.
+- Cada geração desconta o uso real de tokens retornado pela API.
+- **Os créditos não expiram**.
+- Um novo pacote de 1.000.000.000 só é liberado quando o saldo anterior estiver **zerado** e começar um novo dia.
+- O saldo é mantido por um cookie assinado pelo servidor para sobreviver a recarregamentos e reinícios do serviço sem usar um banco de dados.
+- `FORGEAI_CREDIT_SECRET` deve ser configurado no ambiente de produção.
+- O fuso padrão para a virada do dia é `America/Sao_Paulo`.
 
-O script atualmente definido em `package.json` é:
+> Observação: como o projeto atual não possui autenticação e banco de dados, o saldo é associado ao navegador por cookie assinado. Para contas individuais e controle contra uso em vários navegadores/dispositivos, será necessário adicionar login e banco de dados.
 
-```json
-{
-  "scripts": {
-    "start": "node server.js"
-  }
-}
-```
+## 🔐 Contas e créditos persistentes
 
-## 📌 Observações
+O sistema agora usa PostgreSQL para manter contas e saldo por usuário. Cada conta começa com 1.000.000.000 créditos. O saldo não expira. Se o saldo estiver zerado e chegar um novo dia, a conta recebe 1.000.000.000 novamente. Se ainda houver saldo, ele permanece e não recebe crédito extra.
 
-O ForgeAI é um construtor de sites baseado em prompts. A qualidade do resultado depende tanto da instrução fornecida quanto do modelo configurado em `OPENAI_MODEL`.
-
-O projeto mantém o código atual no estado da aplicação durante a sessão. Persistência de projetos, contas de usuários, banco de dados, publicação automática e autenticação ainda não fazem parte da implementação atual.
-
-## 📄 Licença
-
-Este projeto não possui uma licença de código aberto definida neste momento.
+No Render, configure `DATABASE_URL` apontando para um PostgreSQL e `FORGEAI_SESSION_SECRET` com um segredo longo. A chave da OpenAI nunca vai para o navegador.
